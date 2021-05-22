@@ -1,0 +1,22 @@
+# This is a docker-compose file for development. See in release production file.
+version: "3.7"
+
+services:
+  backend:
+    image: rosatom-backend:latest
+    restart: always
+
+  # Nginx
+  frontend:
+    image: rosatom-frontend:latest
+    ports:
+      - "8080:80"
+    restart: always
+
+networks:
+  default:
+    name: rosatom
+    ipam:
+      driver: default
+      config:
+        - subnet: "172.16.238.0/24"

@@ -24,6 +24,7 @@ func main() {
 	// Middleware
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
+	//e.Use(middleware.CORSWithConfig(middleware.CORSConfig{AllowMethods: []string{http.MethodGet, http.MethodHead, http.MethodPut, http.MethodPatch, http.MethodPost, http.MethodDelete}, MaxAge: 300}))
 	e.Use(middleware.CORS())
 
 	tempSensors := temperature.TempArray{make([]*temperature.Temperature, 10)}

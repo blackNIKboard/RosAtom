@@ -9,13 +9,12 @@ async function get() {
   }
   return res;
 }
-var tags;
+
 (async () => {
   while (true) {
-    tags = await get()
     //console.log(tags)
-    document.getElementById("sensors").innerHTML = tags;
-    await sleep(1000)
+    document.getElementById("sensors").innerHTML = await get();
+    await sleep(500)
   }})()
 
 function sleep(ms) {

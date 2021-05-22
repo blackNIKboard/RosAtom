@@ -12,7 +12,8 @@ import (
 )
 
 var (
-	MaxRange = 10.0
+	MaxRange         = 10.0
+	TempSensorsCount = 10
 )
 
 func main() {
@@ -27,9 +28,9 @@ func main() {
 	//e.Use(middleware.CORSWithConfig(middleware.CORSConfig{AllowMethods: []string{http.MethodGet, http.MethodHead, http.MethodPut, http.MethodPatch, http.MethodPost, http.MethodDelete}, MaxAge: 300}))
 	e.Use(middleware.CORS())
 
-	tempSensors := temperature.TempArray{make([]*temperature.Temperature, 10)}
+	tempSensors := temperature.TempArray{make([]*temperature.Temperature, TempSensorsCount)}
 
-	for i := 0; i < 10; i++ {
+	for i := 0; i < TempSensorsCount; i++ {
 		name := "id" + strconv.Itoa(i)
 		tempSensors.Array[i] = &temperature.Temperature{}
 		go tempSensors.Array[i].Generate(name, MaxRange)

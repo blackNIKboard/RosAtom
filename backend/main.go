@@ -4,10 +4,15 @@ import (
 	"math/rand"
 	"net/http"
 	"rosatomcase/backend/temperature"
+	"strconv"
 	"time"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+)
+
+var (
+	MaxRange = 10.0
 )
 
 func main() {
@@ -20,13 +25,17 @@ func main() {
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 
-	temp := temperature.Temperature{}
+	tempSensors := temperature.TempArray{Array: make(map[string]*temperature.Temperature)}
 
-	go temp.Generate()
+	for i := 0; i < 10; i++ {
+		name := "id" + strconv.Itoa(i)
+		tempSensors.Array[name] = &temperature.Temperature{}
+		go tempSensors.Array[name].Generate(name, MaxRange)
+	}
 
 	// Route => handler
 	e.GET("/temp", func(c echo.Context) error {
-		return c.JSON(http.StatusOK, temp.Last())
+		return c.JSON(http.StatusOK, tempSensors.Array[c.QueryParam("id")].Last())
 	})
 
 	// Start server

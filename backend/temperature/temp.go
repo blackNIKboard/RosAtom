@@ -7,9 +7,12 @@ import (
 	"math"
 	"math/rand"
 	"rosatomcase/backend/model"
-	"strconv"
 	"time"
 )
+
+type TempArray struct {
+	Array map[string]*Temperature
+}
 
 type Temperature struct {
 	sensors list.List
@@ -23,7 +26,7 @@ func unhealthyData() int {
 	return rand.Int()%21 + 40
 }
 
-func (receiver *Temperature) Generate() {
+func (receiver *Temperature) Generate(name string, maxRange float64) {
 	chooser, _ := wr.NewChooser(
 		wr.Choice{Item: healthyData, Weight: 9},
 		wr.Choice{Item: unhealthyData, Weight: 1},
@@ -34,12 +37,12 @@ func (receiver *Temperature) Generate() {
 		val := float32(gen())
 		health := true
 
-		if i > 0 && math.Abs(float64(val-receiver.sensors.Back().Value.(model.Sensor).Value)) > 10 {
+		if i > 0 && math.Abs(float64(val-receiver.sensors.Back().Value.(model.SensorData).Value)) > maxRange {
 			health = false
 		}
 
-		receiver.sensors.PushBack(model.Sensor{
-			Name:   "id-" + strconv.Itoa(i),
+		receiver.sensors.PushBack(model.SensorData{
+			Name:   name,
 			Mapped: "sda21321",
 			Value:  val,
 			Health: health,
@@ -53,8 +56,8 @@ func (receiver *Temperature) Generate() {
 	}
 }
 
-func (receiver *Temperature) Last() model.Sensor {
+func (receiver *Temperature) Last() model.SensorData {
 	spew.Dump(receiver.sensors)
 
-	return receiver.sensors.Back().Value.(model.Sensor)
+	return receiver.sensors.Back().Value.(model.SensorData)
 }

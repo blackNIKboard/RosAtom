@@ -3,7 +3,8 @@ package main
 import (
 	"math/rand"
 	"net/http"
-	"rosatomcase/backend/temperature"
+	"rosatomcase/backend/model"
+	"rosatomcase/backend/sensor"
 	"strconv"
 	"time"
 
@@ -12,7 +13,14 @@ import (
 )
 
 var (
-	MaxRange         = 10.0
+	TempWarn = model.ValueWarning{
+		Minimum: 15,
+		Maximum: 32,
+	}
+	EnergyWarn = model.ValueWarning{
+		Minimum: 0,
+		Maximum: 1000,
+	}
 	TempSensorsCount = 10
 )
 
@@ -25,20 +33,19 @@ func main() {
 	// Middleware
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
-	//e.Use(middleware.CORSWithConfig(middleware.CORSConfig{AllowMethods: []string{http.MethodGet, http.MethodHead, http.MethodPut, http.MethodPatch, http.MethodPost, http.MethodDelete}, MaxAge: 300}))
 	e.Use(middleware.CORS())
 
-	tempSensors := temperature.TempArray{make([]*temperature.Temperature, TempSensorsCount)}
+	sensors := sensor.Array{make([]*sensor.Sensor, TempSensorsCount)}
 
 	for i := 0; i < TempSensorsCount; i++ {
 		name := "id" + strconv.Itoa(i)
-		tempSensors.Array[i] = &temperature.Temperature{}
-		go tempSensors.Array[i].Generate(name, MaxRange)
+		sensors.Array[i] = &sensor.Sensor{}
+		go sensors.Array[i].Generate(name, TempWarn, EnergyWarn)
 	}
 
 	// Route => handler
 	e.GET("/temp", func(c echo.Context) error {
-		return c.JSON(http.StatusOK, tempSensors.Retrieve())
+		return c.JSON(http.StatusOK, sensors.Retrieve())
 	})
 
 	// Start server

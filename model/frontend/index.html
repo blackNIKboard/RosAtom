@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial=scale=1.0">
+		<title>Model Viewer</title>
+		<script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.js"></script>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+			integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+		<link rel="stylesheet" href="style.css">
+	</head>
+	<body>
+		
+		<div class="wrapper">
+			<div class="sensors" style="overflow: hidden; position: fixed;">
+				<!-- <div class="card text-white bg-dark mb-3" style="max-width: 60rem;">
+					<div class="card-header"> 
+						<tr>
+							<td>Sensor #1</td>
+							<td><button type="button" class="btn btn-success" style="float:right; scale: 80%;">OK</button></td>
+						</tr>
+					</div>
+					<div class="card-body">
+						Temperature, C: 25
+						<br>
+						Brightness, L: 50
+						<br>
+						Energy, J: 50 
+					</div>
+				</div> -->
+
+
+				<table class="table table-striped table-dark" style="background-color: #212529; width: 800px; text-align: center;">
+					<thead>
+						<tr>
+							<th scope="col">#</th>
+							<th scope="col">Temperature, C</th>
+							<th scope="col">Brightness, L</th>
+							<th scope="col">Energy Consumption, J</th>
+							<th scope="col" style="width: 200px;">Status</th>
+						</tr>
+					</thead>
+					<tbody id="sensors">
+						<tr>
+							<th scope="row">1</th>
+							<td>25</td>
+							<td>25</td>
+							<td>25</td>
+							<td style="background-color: #52b788;">OK</td>
+						</tr>
+						<tr>
+							<th scope="row">2</th>
+							<td>25</td>
+							<td>25</td>
+							<td>25</td>
+							<td style="background-color: #52b788;">OK</td>
+						</tr>
+						<tr>
+							<th scope="row">3</th>
+							<td>25</td>
+							<td>25</td>
+							<td>25</td>
+							<td style="background-color: #52b788;">OK</td>
+						</tr>
+						<tr>
+							<th scope="row">4</th>
+							<td>25</td>
+							<td>25</td>
+							<td>25</td>
+							<td style="background-color: #52b788;">OK</td>
+						</tr>
+						<tr>
+							<th scope="row">5</th>
+							<td>25</td>
+							<td>25</td>
+							<td>25</td>
+							<td style="background-color: #52b788;">OK</td>
+						</tr>
+						<tr>
+							<th scope="row">6</th>
+							<td>25</td>
+							<td>25</td>
+							<td>25</td>
+							<td style="background-color: #52b788;">OK</td>
+						</tr>
+						<tr>
+							<th scope="row">7</th>
+							<td style="color: #e56b6f;">25 (!)</td>
+							<td>25</td>
+							<td>25</td>
+							<td style="background-color: #e56b6f;">Suspect Behavior</td>
+						</tr>
+						<tr>
+							<th scope="row">8</th>
+							<td>25</td>
+							<td>25</td>
+							<td>25</td>
+							<td style="background-color: #52b788;">OK</td>
+						</tr>
+						<tr>
+							<th scope="row">9</th>
+							<td>25</td>
+							<td>25</td>
+							<td>25</td>
+							<td style="background-color: #52b788;">OK</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<div class="modelview">
+				<model-viewer src="assets/house/model.gltf" camera-controls></model-viewer>
+			</div>
+		</div>
+	</body>
+
+	<script src="index.js"></script>
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+		crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+		integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+		crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+		crossorigin="anonymous"></script>
+</html>

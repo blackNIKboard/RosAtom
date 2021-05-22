@@ -1,42 +1,23 @@
-import { Scene, WebGLRenderer, AmbientLight, PerspectiveCamera } from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
+async function get() {
+  let url = 'http://localhost:8090/temp'
+  let obj = await (await fetch(url)).json();
 
-// Import our glTF model.
-import gltfUrl from '../scene/Lantern.gltf'
-
-// Create the renderer and scene, which will consist of one light and the main camera.
-const canvas = document.getElementById('canvas');
-const renderer = new WebGLRenderer({ canvas });
-renderer.setSize(canvas.clientWidth, canvas.clientHeight, false);
-const scene = new Scene();
-
-const camera = new PerspectiveCamera(45, canvas.clientWidth / canvas.clientHeight, 1, 1000);
-camera.position.set(200, 40, 0);
-camera.lookAt(0, 40, 0);
-scene.add(camera);
-
-const light = new AmbientLight();
-scene.add(light);
-
-// Load the glTF model and add it to the scene.
-const loader = new GLTFLoader();
-loader.load(gltfUrl, (gltf) => {
-  scene.add(...gltf.scene.children);
-});
-
-// Instruct the engine to resize when the window does.
-window.addEventListener('resize', () => {
-  camera.aspect = canvas.clientWidth / canvas.clientHeight;
-  camera.updateProjectionMatrix();
-
-  renderer.setSize(canvas.clientWidth, canvas.clientHeight, false);
-});
-
-// Start the engine's main render loop.
-const animate = () => {
-  renderer.render(scene, camera);
-  requestAnimationFrame(animate);
+  //console.log(obj);
+  let res = ""
+  for (let i = 0; i < obj.length; i++) {
+    res+="name: "+obj[i].name+ " - "+ "value: "+ obj[i].value+ " - passed healthcheck: "+ obj[i].health+"<br>";
+  }
+  return res;
 }
+var tags;
+(async () => {
+  while (true) {
+    tags = await get()
+    //console.log(tags)
+    document.getElementById("sensors").innerHTML = tags;
+    await sleep(1000)
+  }})()
 
-animate();
-
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}

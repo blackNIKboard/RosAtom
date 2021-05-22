@@ -11,7 +11,18 @@ import (
 )
 
 type TempArray struct {
-	Array map[string]*Temperature
+	Array []*Temperature
+}
+
+func (receiver TempArray) Retrieve() []model.SensorData {
+	var data []model.SensorData
+	spew.Dump("retrieving data")
+
+	for i := 0; i < len(receiver.Array); i++ {
+		data = append(data, receiver.Array[i].Last())
+	}
+
+	return data
 }
 
 type Temperature struct {
@@ -57,7 +68,6 @@ func (receiver *Temperature) Generate(name string, maxRange float64) {
 }
 
 func (receiver *Temperature) Last() model.SensorData {
-	spew.Dump(receiver.sensors)
-
+	//spew.Dump(receiver.sensors)
 	return receiver.sensors.Back().Value.(model.SensorData)
 }

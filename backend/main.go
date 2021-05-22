@@ -24,20 +24,21 @@ func main() {
 	// Middleware
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
+	e.Use(middleware.CORS())
 
-	tempSensors := temperature.TempArray{Array: make(map[string]*temperature.Temperature)}
+	tempSensors := temperature.TempArray{make([]*temperature.Temperature, 10)}
 
 	for i := 0; i < 10; i++ {
 		name := "id" + strconv.Itoa(i)
-		tempSensors.Array[name] = &temperature.Temperature{}
-		go tempSensors.Array[name].Generate(name, MaxRange)
+		tempSensors.Array[i] = &temperature.Temperature{}
+		go tempSensors.Array[i].Generate(name, MaxRange)
 	}
 
 	// Route => handler
 	e.GET("/temp", func(c echo.Context) error {
-		return c.JSON(http.StatusOK, tempSensors.Array[c.QueryParam("id")].Last())
+		return c.JSON(http.StatusOK, tempSensors.Retrieve())
 	})
 
 	// Start server
-	e.Logger.Fatal(e.Start(":8080"))
+	e.Logger.Fatal(e.Start(":8090"))
 }

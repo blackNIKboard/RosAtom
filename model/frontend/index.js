@@ -1,6 +1,6 @@
 async function get() {
-    // let url = 'http://'+location.host+'/api/temp'
-    let url = 'http://localhost:8090/temp'
+    let url = 'http://'+location.host+'/api/temp'
+    // let url = 'http://localhost:8090/temp'
     let obj = await (await fetch(url)).json();
 
     //console.log(obj);

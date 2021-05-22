@@ -2,9 +2,8 @@ package sensor
 
 import (
 	"container/list"
-	"github.com/davecgh/go-spew/spew"
-	wr "github.com/mroth/weightedrand"
 	"math/rand"
+	"rosatomcase/backend/mock"
 	"rosatomcase/backend/model"
 	"time"
 )
@@ -15,7 +14,6 @@ type Array struct {
 
 func (receiver Array) Retrieve() []model.SensorData {
 	var data []model.SensorData
-	spew.Dump("retrieving data")
 
 	for i := 0; i < len(receiver.Array); i++ {
 		data = append(data, receiver.Array[i].Last())
@@ -61,27 +59,32 @@ func (receiver *Sensor) checkValue(val float32, warn model.ValueWarning) bool {
 }
 
 func (receiver *Sensor) Generate(name string, tempWarn model.ValueWarning, energyWarn model.ValueWarning) {
-	chooserTemp, _ := wr.NewChooser(
-		wr.Choice{Item: tempHealthyData, Weight: 9},
-		wr.Choice{Item: tempUnhealthyData, Weight: 1},
-	)
+	errProb := 0.99
 
-	chooserBright, _ := wr.NewChooser(
-		wr.Choice{Item: brightHealthyData, Weight: 9},
-		wr.Choice{Item: brightUnhealthyData, Weight: 1},
-	)
+	randTemp := mock.Randomizer{
+		Value:       tempHealthyData,
+		Unvalue:     tempUnhealthyData,
+		ProbOfValue: errProb,
+	}
 
-	chooserEnergy, _ := wr.NewChooser(
-		wr.Choice{Item: energyHealthyData, Weight: 9},
-		wr.Choice{Item: energyUnhealthyData, Weight: 1},
-	)
+	randBright := mock.Randomizer{
+		Value:       brightHealthyData,
+		Unvalue:     brightUnhealthyData,
+		ProbOfValue: errProb,
+	}
 
-	recent_err := 10
+	randEnergy := mock.Randomizer{
+		Value:       energyHealthyData,
+		Unvalue:     energyUnhealthyData,
+		ProbOfValue: errProb,
+	}
+
+	recentErr := 10
 
 	for i := 0; ; i++ {
-		temp := float32(chooserTemp.Pick().(func() int)())
-		bright := float32(chooserBright.Pick().(func() int)())
-		energy := float32(chooserEnergy.Pick().(func() int)())
+		temp := float32(randTemp.Return().(func() int)())
+		bright := float32(randBright.Return().(func() int)())
+		energy := float32(randEnergy.Return().(func() int)())
 
 		tempHealth := receiver.checkValue(temp, tempWarn)
 		brightHealth := receiver.checkValue(bright, model.ValueWarning{
@@ -92,9 +95,9 @@ func (receiver *Sensor) Generate(name string, tempWarn model.ValueWarning, energ
 		health := tempHealth && brightHealth && energyHealth
 
 		if health == false {
-			recent_err = 0
+			recentErr = 0
 		} else {
-			recent_err++
+			recentErr++
 		}
 
 		receiver.sensors.PushBack(model.SensorData{
@@ -107,7 +110,7 @@ func (receiver *Sensor) Generate(name string, tempWarn model.ValueWarning, energ
 			},
 			Health: model.HealthCheck{
 				Health: func() bool {
-					if recent_err > 5 {
+					if recentErr > 5 {
 						return true
 					} else {
 						return false

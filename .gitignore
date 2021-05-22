@@ -1,2 +1,7 @@
-# NODE
+# node
+
 model/node_modules
+
+# idea
+
+.idea/*

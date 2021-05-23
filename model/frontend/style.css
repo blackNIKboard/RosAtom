@@ -3,29 +3,34 @@ body {
     font-family: 'JetBrains Mono', monospace;
 }
 
+@font-face {
+    font-family: 'JetBrains Mono';
+    src: url("assets/JetBrainsMono.woff2") format("woff");
+}
+
 .wrapper {
-   display: grid;
-   grid-template-columns: repeat(3, 1fr);
-   grid-template-rows: repeat(3, 100px);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 100px);
 }
 
 .sensors {
     margin-top: 160px;
-   grid-column-start: 1;
-   grid-column-end: 2;
-   grid-row-start: 1;
-   grid-row-end: 4;
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 1;
+    grid-row-end: 4;
 }
 
 .modelview {
-   grid-column-start: 2;
-   grid-column-end: 4;
-   grid-row-start: 1;
-   grid-row-end: 4;
+    grid-column-start: 2;
+    grid-column-end: 4;
+    grid-row-start: 1;
+    grid-row-end: 4;
 }
 
 model-viewer {
-	width: 800px;
-	height: 800px;
-	margin: 0 auto;
+    width: 800px;
+    height: 800px;
+    margin: 0 auto;
 }

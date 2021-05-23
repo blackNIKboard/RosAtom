@@ -49,10 +49,16 @@ function parseHealth(health) {
 }
 
 (async () => {
+    // let time = (new Date()).getTime()
+    // var avg = []
     while (true) {
         //console.log(tags)
         document.getElementById("sensors").innerHTML = await get();
-        await sleep(500)
+        await sleep(200)
+        // avg.push((new Date()).getTime() - time)
+        // time = (new Date()).getTime()
+        // let sum = avg.reduce((a, b) => a + b, 0);
+        // console.log(sum/avg.length)
     }
 })()
 

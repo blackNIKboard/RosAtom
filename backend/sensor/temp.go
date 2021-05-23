@@ -80,6 +80,9 @@ func (receiver *Sensor) Generate(name string, tempWarn model.ValueWarning, energ
 	}
 
 	recentErr := 10
+	recentErrTempEx := false
+	recentErrBrightEx := false
+	recentErrEnergyEx := false
 
 	for i := 0; ; i++ {
 		temp := float32(randTemp.Return().(func() int)())
@@ -96,6 +99,9 @@ func (receiver *Sensor) Generate(name string, tempWarn model.ValueWarning, energ
 
 		if health == false {
 			recentErr = 0
+			recentErrTempEx = tempHealth
+			recentErrBrightEx = brightHealth
+			recentErrEnergyEx = energyHealth
 		} else {
 			recentErr++
 		}
@@ -116,13 +122,31 @@ func (receiver *Sensor) Generate(name string, tempWarn model.ValueWarning, energ
 						return false
 					}
 				}(),
-				Temperature: tempHealth,
-				Brightness:  brightHealth,
-				Energy:      energyHealth,
+				Temperature: func() bool {
+					if recentErr > 5 {
+						return tempHealth
+					} else {
+						return recentErrTempEx
+					}
+				}(),
+				Brightness: func() bool {
+					if recentErr > 5 {
+						return brightHealth
+					} else {
+						return recentErrBrightEx
+					}
+				}(),
+				Energy: func() bool {
+					if recentErr > 5 {
+						return energyHealth
+					} else {
+						return recentErrEnergyEx
+					}
+				}(),
 			},
 		})
 
-		time.Sleep(time.Second)
+		time.Sleep(time.Second / 2)
 
 		for i := 0; i < receiver.sensors.Len()-10; i++ {
 			receiver.sensors.Remove(receiver.sensors.Front())
